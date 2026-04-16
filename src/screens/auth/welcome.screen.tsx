@@ -57,7 +57,6 @@ const WelcomeScreen = () => {
 
 
 
-      {/* fkdsfjsldkfjdsl */}
     </Template>
   );
 };
