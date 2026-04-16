@@ -54,6 +54,10 @@ const WelcomeScreen = () => {
         onNext={handelNext}
         onPrev={handlePrev}
       />
+
+
+
+      {/* fkdsfjsldkfjdsl */}
     </Template>
   );
 };
