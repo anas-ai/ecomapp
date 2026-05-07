@@ -35,6 +35,7 @@ const Pagination = ({ index, total, onNext, onPrev }: PaginationProps) => {
     <View style={styles.container}>
       {index > 0 ? (
         <AppButton
+        type='text'
           title="Prev"
           onPress={onPrev}
           variant="h5"
@@ -68,6 +69,7 @@ const Pagination = ({ index, total, onNext, onPrev }: PaginationProps) => {
       </View>
       <View>
         <AppButton
+        type='text'
           onPress={onNext}
           style={{ color: colors.red }}
           variant="h5"

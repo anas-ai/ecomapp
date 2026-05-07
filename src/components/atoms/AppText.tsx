@@ -1,19 +1,22 @@
-import { StyleSheet, Text, TextStyle, View, ViewProps } from 'react-native';
+import { StyleProp, StyleSheet, Text, TextStyle } from 'react-native';
 import React from 'react';
 import { Colors } from '../../constants/colors.name';
 import { moderateScale } from 'react-native-size-matters';
 
-export type textProps = {
+type Variant = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'h7' | 'h8';
+type FontWeight = 'Regular' | 'Medium' | 'SemiBold' | 'Bold';
+
+export type AppTextProps = {
   children: React.ReactNode;
   numberOfLines?: number;
-  style?: TextStyle;
-  variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'h7' | 'h8';
-  weight?: 'Regular' | 'Medium' | 'SemiBold' | 'Bold';
+  style?: StyleProp<TextStyle>;
+  variant?: Variant;
+  weight?: FontWeight;
 };
 
-const fontSize = {
-  h1: 24,
-  h2: 22,
+const fontSize: Record<Variant, number> = {
+  h1: 40,
+  h2: 32,
   h3: 20,
   h4: 18,
   h5: 16,
@@ -22,7 +25,7 @@ const fontSize = {
   h8: 10,
 };
 
-const fontFamily: Record<string, string> = {
+const fontFamily: Record<FontWeight, string> = {
   Regular: 'Montserrat-Regular',
   Medium: 'Montserrat-Medium',
   SemiBold: 'Montserrat-SemiBold',
@@ -35,17 +38,17 @@ const AppText = ({
   style,
   variant = 'h8',
   weight = 'Regular',
-}: textProps) => {
+}: AppTextProps) => {
   return (
     <Text
-      numberOfLines={numberOfLines ? numberOfLines : undefined}
+      numberOfLines={numberOfLines}
       style={[
         styles.text,
-        style,
         {
           fontSize: moderateScale(fontSize[variant]),
           fontFamily: fontFamily[weight],
         },
+        style,
       ]}
     >
       {children}

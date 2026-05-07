@@ -1,34 +1,40 @@
-import { StyleSheet, Text, TextStyle, TouchableOpacity, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
-import AppText, { textProps } from './AppText';
-import { Colors } from '../../constants/colors.name';
+import AppText, { AppTextProps } from './AppText';
 import colors from '../../styles/colors';
+import { spacing } from '../../styles/spacing';
+
+type ButtonType = 'primary' | 'secondary' | 'text';
 
 type AppButtonProps = {
   title: string;
   onPress?: () => void;
-} & Omit<textProps, 'children'>;
+  type?: ButtonType;
+  textStyle?: TextStyle;
+  buttonStyle?:any
+} & Omit<AppTextProps, 'children'>;
 
-
-const getBgVariant = (variant: string) => {
-  switch (variant) {
-    case 'primary':
-      return Colors.primary;
-    case 'secondary':
-      return Colors.secondary;
-    case 'success':
-      return colors.green;
-    case 'danger':
-      return colors.red;
-    default:
-      return null;
-  }
-};
-
-const AppButton = ({ title, onPress,...textProps}: AppButtonProps) => {
+const AppButton = ({
+  title,
+  onPress,
+  type = 'primary',
+  textStyle,
+  buttonStyle,
+  ...textProps
+}: AppButtonProps) => {
   return (
-    <TouchableOpacity onPress={onPress} activeOpacity={0.7} >
-      <AppText {...textProps}>
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.7}
+      style={[styles.button, type === 'primary' && styles.primaryButton,buttonStyle]}
+    >
+      <AppText {...textProps} style={[styles.text, textStyle]}>
         {title}
       </AppText>
     </TouchableOpacity>
@@ -37,4 +43,17 @@ const AppButton = ({ title, onPress,...textProps}: AppButtonProps) => {
 
 export default AppButton;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  button: {
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+    alignItems: 'center',
+  },
+  primaryButton: {
+    backgroundColor: colors.primary,
+    borderRadius: spacing.sm,
+  },
+  text: {
+    color: colors.black,
+  },
+});

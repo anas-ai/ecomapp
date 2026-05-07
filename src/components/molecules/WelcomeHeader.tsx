@@ -23,7 +23,13 @@ const WelcomeHeader = ({ index, onSkip }: any) => {
         </AppText>
       </View>
 
-      <AppButton title="Skip" variant="h5" weight="Bold" onPress={onSkip} />
+      <AppButton
+        type="text"
+        title="Skip"
+        variant="h5"
+        weight="Bold"
+        onPress={onSkip}
+      />
     </View>
   );
 };

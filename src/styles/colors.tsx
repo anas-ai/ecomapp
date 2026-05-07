@@ -9,7 +9,7 @@ const colors = {
     lightGray: '#F6F8FA',
 
     placeHolder: '#111',
-    borderGrey: '#EAEBEC',
+    borderGrey: '#A8A8A9',
 
     shadow: "rgba(0, 0, 0, 0.25)",
 
@@ -22,7 +22,9 @@ const colors = {
     bgPink1: '#FFFAE8',
     bgBlack: "rgba(0, 0, 0, 0.75)",
     bgBlack1: "#2A2A2B",
-    grayColor:'#D1D3D8'
+    grayColor:'#D1D3D8',
+
+    inputBg:'#F3F3F3'
 };
 
 export default colors;

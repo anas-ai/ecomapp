@@ -1,38 +1,37 @@
-import { View, Text, TouchableOpacity } from 'react-native';
-import React, { useRef, useState } from 'react';
-import Template from '../../components/templates/Template';
-import WelcomeSlide from '../../components/organisms/welcome.slide';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Swiper from 'react-native-swiper';
-import { slides } from '../../constants/onboarding.data';
-import AppText from '../../components/atoms/AppText';
+import Pagination from '../../components/molecules/pagination';
 import WelcomeHeader from '../../components/molecules/WelcomeHeader';
+import WelcomeSlide from '../../components/organisms/welcome.slide';
+import Template from '../../components/templates/Template';
+import { slides } from '../../constants/onboarding.data';
 import { AUTH_SCREENS_NAME } from '../../constants/screen.names';
 import { useAppNavigation } from '../../hooks/navigateTo';
-import Pagination from '../../components/molecules/pagination';
 
 const WelcomeScreen = () => {
+  console.log('welcome screeen');
+  
   const [index, setIndex] = useState(0);
   const swipeRef = useRef<any>(null)
   const { navigateTo } = useAppNavigation();
-  const handleSkip = () => {
+  const handleSkip = useCallback(() => {
     navigateTo(AUTH_SCREENS_NAME.SIGN_IN);
-  };
+  }, [navigateTo]);
 
-  const handelNext = () => {
+  const handelNext = useCallback(() => {
     if (index < slides.length - 1) {
       swipeRef.current?.scrollBy(1);
     } else {
       navigateTo(AUTH_SCREENS_NAME.SIGN_IN);
     }
-  };
+  }, [index, navigateTo]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     if (index > 0) {
       swipeRef.current?.scrollBy(-1)
     }
-  };
-
-  console.log(index)
+  },[index])
+  
 
   return (
     <Template>

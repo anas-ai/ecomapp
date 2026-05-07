@@ -6,6 +6,8 @@ import {
 } from '../../constants/screen.names';
 import WelcomeScreen from '../../screens/auth/welcome.screen';
 import Signinscreen from '../../screens/auth/signin.screen';
+import SignupScreen from '../../screens/auth/signup.screen';
+import ForgotPassword from '../../screens/auth/forgot.password';
 
 export type MainStackParamsList = {
   home: undefined;
@@ -14,6 +16,8 @@ export type MainStackParamsList = {
 export type AuthStackParamList = {
   welcome: undefined;
   signin: undefined;
+  signup: undefined;
+  forgotpassword: undefined;
 };
 export type ScreenConfig<
   T extends keyof MainStackParamsList | keyof AuthStackParamList,
@@ -29,5 +33,6 @@ export const MAIN_STACK: ScreenConfig<keyof MainStackParamsList>[] = [
 export const AUTH_STACK: ScreenConfig<keyof AuthStackParamList>[] = [
   { name: AUTH_SCREENS_NAME.WELCOME_SCREENS, component: WelcomeScreen },
   { name: AUTH_SCREENS_NAME.SIGN_IN, component: Signinscreen },
-  
+  { name: AUTH_SCREENS_NAME.SIGN_UP, component: SignupScreen },
+  { name: AUTH_SCREENS_NAME.FORGOT_PASSWORD, component: ForgotPassword },
 ];
