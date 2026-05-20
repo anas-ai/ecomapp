@@ -8,3 +8,6 @@ export const Welcomeimages = {
     Google:require('../assets/images/socailIcons/Google.png'),
     Facebook:require('../assets/images/socailIcons/Facebook.png'),
   }
+export const GET_STARTED_IMAGES = {
+  GetStartedIMAGES:require('../assets/images/getstarted.png'),
+}

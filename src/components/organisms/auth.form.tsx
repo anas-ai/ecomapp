@@ -1,7 +1,7 @@
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
-import { scale } from 'react-native-size-matters';
+import { moderateScale, scale } from 'react-native-size-matters';
 import colors from '../../styles/colors';
 import { spacing } from '../../styles/spacing';
 import AppButton from '../atoms/AppButton';
@@ -20,12 +20,14 @@ type Field = {
 };
 
 type AuthFormProps = {
-  title: string;
+  title?: string;
   fields: Field[];
   forgotPasswordText?: () => void;
   onSubmit: (data: any) => void;
   socialLogin?: React.ReactNode;
   AuthSwitch?: React.ReactNode;
+  BtnTitle?: string;
+  HelperText?: string;
 };
 const AuthForm = ({
   title,
@@ -34,25 +36,36 @@ const AuthForm = ({
   socialLogin,
   AuthSwitch,
   forgotPasswordText,
+  BtnTitle = 'login',
+  HelperText,
 }: AuthFormProps) => {
   const {
     control,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
+  const password = watch('password');
   return (
     <View>
       <AppText variant="h1" weight="Bold">
         {title}
       </AppText>
-      
 
-      {fields.map((field, index) => (
+      {fields?.map((field, index) => (
         <Controller
           key={index}
           control={control}
           name={field.name}
-          rules={field.rules}
+          rules={
+            field.name === 'confirmPassword'
+              ? {
+                  ...field.rules,
+                  validate: (value: string) =>
+                    value === password || 'Passwords do not match',
+                }
+              : field.rules
+          }
           render={({ field: { onChange, onBlur, value } }) => (
             <InputField
               placeholder={field.placeholder}
@@ -69,10 +82,32 @@ const AuthForm = ({
         />
       ))}
 
+      {HelperText && (
+        <View style={{ flexDirection: 'row', marginTop: spacing.xl }}>
+        <AppText
+          variant="h5"
+          weight="Regular"
+          style={{color:colors.primary}}
+        >
+          *
+        </AppText>
+        <AppText
+          variant="h6"
+          weight="Regular"
+          style={{
+            color: colors.bgBlack1,
+          }}
+        >
+          {HelperText}
+        </AppText>
+        </View>
+
+      )}
+
       {forgotPasswordText && (
         <View style={{ alignItems: 'flex-end' }}>
           <AppButton
-          onPress={forgotPasswordText}
+            onPress={forgotPasswordText}
             title="forgot password?"
             type="text"
             textStyle={{
@@ -86,7 +121,7 @@ const AuthForm = ({
       )}
       <AppButton
         onPress={handleSubmit(onSubmit)}
-        title="Login"
+        title={BtnTitle}
         type="primary"
         buttonStyle={{
           marginTop: spacing.xxl,

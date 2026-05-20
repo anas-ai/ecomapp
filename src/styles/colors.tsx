@@ -7,6 +7,7 @@ const colors = {
     greyColor: '#212121',
     darkGray: '#A6A6A6',
     lightGray: '#F6F8FA',
+    iconColor:'#626262',
 
     placeHolder: '#111',
     borderGrey: '#A8A8A9',

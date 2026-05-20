@@ -8,6 +8,7 @@ import WelcomeScreen from '../../screens/auth/welcome.screen';
 import Signinscreen from '../../screens/auth/signin.screen';
 import SignupScreen from '../../screens/auth/signup.screen';
 import ForgotPassword from '../../screens/auth/forgot.password';
+import Getstarted from '../../screens/auth/getstarted';
 
 export type MainStackParamsList = {
   home: undefined;
@@ -18,6 +19,7 @@ export type AuthStackParamList = {
   signin: undefined;
   signup: undefined;
   forgotpassword: undefined;
+  getstarted: undefined;
 };
 export type ScreenConfig<
   T extends keyof MainStackParamsList | keyof AuthStackParamList,
@@ -35,4 +37,5 @@ export const AUTH_STACK: ScreenConfig<keyof AuthStackParamList>[] = [
   { name: AUTH_SCREENS_NAME.SIGN_IN, component: Signinscreen },
   { name: AUTH_SCREENS_NAME.SIGN_UP, component: SignupScreen },
   { name: AUTH_SCREENS_NAME.FORGOT_PASSWORD, component: ForgotPassword },
+  { name: AUTH_SCREENS_NAME.GETSTARTED, component: Getstarted },
 ];

@@ -16,6 +16,7 @@ const Signinscreen = () => {
 
   const handleSubmit = (data: any) => {
     console.log(data);
+    navigateTo(AUTH_SCREENS_NAME.GETSTARTED)
   };
   const GoogleLogin = () => {
     console.log('google ');
@@ -58,7 +59,7 @@ const goToSignup = useCallback(() => {
             rules: {
               required: 'Password is required',
               minLength: {
-                value: 6,
+                value: /^(?=.*[!@#$%^&*])(?=.*[A-Z]).{6,}$/,
                 message: 'Minimum 6 characters required',
               },
             },
@@ -79,6 +80,7 @@ const goToSignup = useCallback(() => {
             SignUpPress={goToSignup}
           />
         }
+        BtnTitle='Login'
         onSubmit={handleSubmit}
       />
     </Template>
