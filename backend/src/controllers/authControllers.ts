@@ -8,52 +8,52 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
     try {
         // Get frontend data
         const {
-            name,
-            email,
+            identifier,
             password,
             confirmPassword
         } = req.body;
 
-        if (password !== confirmPassword) {
-            throw new AppError('Password do not match', 400);
+       if(!identifier || !password || !confirmPassword){
+        throw new AppError('All fields are required',400);
+       }
+
+       if(password !== confirmPassword){
+        throw new AppError('Passwords do not match',400)
+       }
+
+       const isEmail = identifier.includes('@')
+
+       const existingUser = await prisma.user.findFirst({
+        where:{
+            OR:[
+                {email: identifier},
+                {username:identifier}
+            ]
         }
+       })
 
+       if(existingUser){
+        throw new AppError('User already exists',400)
+       }
 
-        //Check empty fields
+       const hashedPassword = await bcrypt.hash(password,10);
 
-        if (!name || !email || !password || !confirmPassword) {
-            throw new AppError('All fields are required', 400);
+       const newUser = await prisma.user.create({
+        data:{
+            email:isEmail ? identifier : null,
+            username:!isEmail ? identifier:null,
+            password: hashedPassword
+        },
+        select:{
+            id:true,
+            email:true,
+            username:true
         }
-        // Check existing email
+       })
 
-        const existingUser =
-            await prisma.user.findUnique({
-                where: {
-                    email
-                }
-            })
-
-        if (existingUser) {
-            throw new AppError('Email already exists', 400);
-        }
-
-
-        // Hash Password
-
-        const hashedPassword = await bcrypt.hash(password, 10)
-
-        const user = await prisma.user.create({
-            data: {
-                name,
-                email,
-                password: hashedPassword
-            }
-        });
-
-        res.status(201).json({
-            message: 'Account Created Successfully',
-            user
-        })
+       res.status(201).json({
+        message:'User registered successfully',
+       })
 
     } catch (error) {
 
@@ -65,20 +65,23 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { email, password } = req.body;
+        const { identifier, password } = req.body;
 
-        if (!email || !password) {
+        if (!identifier || !password) {
             throw new AppError('All fields are required', 400);
         }
 
-        const user = await prisma.user.findUnique({
+        const user = await prisma.user.findFirst({
             where: {
-                email,
+                OR: [
+                    { email: identifier },
+                    { username: identifier }
+                ]
             }
         })
 
         if (!user) {
-            throw new AppError('Invalid email or password', 400);
+            throw new AppError('Invalid credentials', 400);
         }
 
         const isPasswordMatch = await bcrypt.compare(
@@ -87,8 +90,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         );
 
         if (!isPasswordMatch) {
-            throw new AppError('Invalid email or password', 400);
-
+            throw new AppError('Invalid credentials', 400);
         }
 
 
@@ -97,9 +99,10 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
         const userInfo = {
             id: user.id,
-            name: user.name,
+            name: user.username,
             email: user.email
         }
+
         res.status(200).json({
             message: 'Login Successful',
             token: token,
@@ -109,7 +112,6 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
     } catch (error) {
         console.log(error);
-
         next(error)
 
     }
