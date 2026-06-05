@@ -13,7 +13,12 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
             confirmPassword
         } = req.body;
 
+        console.log("BODY =>", req.body);
+console.log("STEP 1");
+
        if(!identifier || !password || !confirmPassword){
+            console.log("STEP 2 - Validation Failed");
+
         throw new AppError('All fields are required',400);
        }
 
@@ -22,6 +27,7 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
        }
 
        const isEmail = identifier.includes('@')
+console.log("STEP 3 - Validation Passed");
 
        const existingUser = await prisma.user.findFirst({
         where:{
@@ -35,7 +41,7 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
        if(existingUser){
         throw new AppError('User already exists',400)
        }
-
+console.log("STEP 4 - Existing User:", existingUser);
        const hashedPassword = await bcrypt.hash(password,10);
 
        const newUser = await prisma.user.create({
