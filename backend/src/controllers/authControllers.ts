@@ -59,6 +59,7 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
 
         res.status(201).json({
             message: 'User registered successfully',
+            user: newUser
         })
 
     } catch (error) {
