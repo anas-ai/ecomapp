@@ -14,52 +14,52 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
         } = req.body;
 
         console.log("BODY =>", req.body);
-console.log("STEP 1");
+        console.log("STEP 1");
 
-       if(!identifier || !password || !confirmPassword){
+        if (!identifier || !password || !confirmPassword) {
             console.log("STEP 2 - Validation Failed");
 
-        throw new AppError('All fields are required',400);
-       }
-
-       if(password !== confirmPassword){
-        throw new AppError('Passwords do not match',400)
-       }
-
-       const isEmail = identifier.includes('@')
-console.log("STEP 3 - Validation Passed");
-
-       const existingUser = await prisma.user.findFirst({
-        where:{
-            OR:[
-                {email: identifier},
-                {username:identifier}
-            ]
+            throw new AppError('All fields are required', 400);
         }
-       })
 
-       if(existingUser){
-        throw new AppError('User already exists',400)
-       }
-console.log("STEP 4 - Existing User:", existingUser);
-       const hashedPassword = await bcrypt.hash(password,10);
-
-       const newUser = await prisma.user.create({
-        data:{
-            email:isEmail ? identifier : null,
-            username:!isEmail ? identifier:null,
-            password: hashedPassword
-        },
-        select:{
-            id:true,
-            email:true,
-            username:true
+        if (password !== confirmPassword) {
+            throw new AppError('Passwords do not match', 400)
         }
-       })
 
-       res.status(201).json({
-        message:'User registered successfully',
-       })
+        const isEmail = identifier.includes('@')
+        console.log("STEP 3 - Validation Passed");
+
+        const existingUser = await prisma.user.findFirst({
+            where: {
+                OR: [
+                    { email: identifier },
+                    { username: identifier }
+                ]
+            }
+        })
+
+        if (existingUser) {
+            throw new AppError('User already exists', 400)
+        }
+        console.log("STEP 4 - Existing User:", existingUser);
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = await prisma.user.create({
+            data: {
+                email: isEmail ? identifier : null,
+                username: !isEmail ? identifier : null,
+                password: hashedPassword
+            },
+            select: {
+                id: true,
+                email: true,
+                username: true
+            }
+        })
+
+        res.status(201).json({
+            message: 'User registered successfully',
+        })
 
     } catch (error) {
 
